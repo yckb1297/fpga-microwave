@@ -19,8 +19,8 @@ module rotary(
     reg [11:0] r_counter = 0;
     
     reg r_led_toggle = 1'b0;
-    reg r_prev_key = 1'b0;
-    reg r_key_armed = 1'b0;
+    reg r_prev_key = 1'b1;
+
     // 1. s1, s2 (순차)
     //  CW: 00 -> 10 -> 11 -> 01 -> 00 (1증가 r_step)
     // CCW: 00 -> 01 -> 11 -> 10 -> 00
@@ -30,8 +30,7 @@ module rotary(
             r_prev_state <= 2'b00;
             r_curr_state <= 2'b00;
             r_step <= 2'b00;
-            r_prev_key <= 1'b0; 
-            r_key_armed <= 1'b0;
+            r_prev_key <= 1'b1; 
             r_counter <= 0;
             rotary_event <= 1'b0;
         end else begin
@@ -39,8 +38,6 @@ module rotary(
             r_prev_key <= key;
             r_curr_state <= {s1, s2};
             rotary_event <= 1'b0;
-            if (!key)
-                r_key_armed <= 1'b1;
             if (ctrl_en) begin
             case({r_prev_state, r_curr_state})
                 4'b0010, 4'b1011, 4'b1101, 4'b0100: begin
@@ -71,9 +68,8 @@ module rotary(
                 end
             endcase
 
-            if(!r_prev_key && key && r_key_armed) begin
+            if(r_prev_key && !key) begin    //하강 에지 검출
                 rotary_event <= 1'b1;
-                r_key_armed <= 1'b0;
 
                 if(r_counter <= 12'd3569)
                     r_counter <= r_counter + 12'd30;

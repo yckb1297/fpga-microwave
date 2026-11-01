@@ -116,15 +116,25 @@ module buzzer #(
 
         end else begin
             //btn2: open/close door buzzer
-            if(door_event) begin
+            if (door_event) begin
                 for(i = 0; i < 2; i = i + 1) begin
                     r_clk_cnt[i] <= 22'd0;
                     r_70ms_cnt[i] <= 0;
                     r_buzzer_freq[i] <= 1'b0;
                 end
-                r_sound_open <= !door_open;
-                r_door_open <= door_open ? 3'd4 : 3'd0;
-                r_door_close <= door_open ? 3'd0 : 3'd4;
+
+                if (!door_open) begin
+                    // 문 열기
+                    r_sound_open <= 1'b1;
+                    r_door_open <= 3'd0;
+                    r_door_close <= 3'd4;
+                end
+                else begin
+                    // 문 닫기
+                    r_sound_open <= 1'b0;
+                    r_door_open <= 3'd4;
+                    r_door_close <= 3'd0;
+                end
             end else if(r_sound_open && r_door_open < 4) begin
                     if(r_70ms_cnt[0] >= NOTE_CYCLES -1) begin
                         r_70ms_cnt[0] <= 0;
