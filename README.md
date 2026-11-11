@@ -4,7 +4,7 @@ Basys3 보드와 Verilog HDL로 전자레인지의 시간 설정, 카운트다�
 
 ![프로젝트 개요 및 하드웨어 구성](images/슬라이드3.JPG)
 
-**[동작 영상 보기](video/microwave%20동작영상.mp4)** · **[발표 자료 보기](images/)**
+**[동작 영상 보기](https://youtu.be/MlRTrFV1iwM)** · **[발표 자료 보기](images/)**
 
 ## 개발 환경
 
